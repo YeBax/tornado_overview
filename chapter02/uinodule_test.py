@@ -2,6 +2,20 @@ from tornado import web, ioloop, template
 from tornado.web import StaticFileHandler
 
 
+class OrderModule(web.UIModule):
+    def cal_total(self, price, nums):
+        return price * nums
+
+    def render(self, order, *args, **kwargs):
+        return self.render_string("ui_modules/order-list.html", order=order, cal_total=self.cal_total)
+
+    # def embedded_css(self):
+    #     return "body {background-color:green}"
+
+    def css_files(self):
+        return ["ui_modules/order-list.css"]
+
+
 class MainHandler(web.RequestHandler):
     # 当客户端发起不同的http方法的时候，只需要重载 handler中的对应方法即可
     async def get(self, *args, **kwargs):
@@ -36,9 +50,7 @@ class MainHandler(web.RequestHandler):
                 "nums": 2
             }
         ]
-        self.render("index.html", orders=orders)
-
-
+        self.render("index2.html", orders=orders)
 
 
 class MainHandler2(web.RequestHandler):
@@ -51,6 +63,9 @@ settings = {
     "static_path": r"E:\tornado_overview\chapter02\static",
     "static_url_prefix": "/static/",
     "template_path": "templates",
+    "ui_modules":{
+        "OrderModule":OrderModule
+    }
 }
 
 if __name__ == '__main__':
@@ -60,5 +75,5 @@ if __name__ == '__main__':
 
     ], debug=True, **settings)
 
-    app.listen(8888)
+    app.listen(8889)
     ioloop.IOLoop.current().start()

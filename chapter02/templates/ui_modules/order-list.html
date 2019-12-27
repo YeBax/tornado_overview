@@ -1,0 +1,24 @@
+<dd class="item clearfix">
+    <div class="item-row">
+        <div class="col col-1">
+            <div class="g-pic">
+                <img src="{{ order['image'] }}"
+                     srcset="{{ order['image'] }}"
+                     width="40" height="40">
+            </div>
+            <div class="g-info">{{ order['name'] }}</a></div>
+        </div>
+        {% if order['price'] >0 %}
+        <div class="col col-2">{{ order['price'] }}</div>
+        {% else %}
+        <div class="col col-2">免费</div>
+        {% end %}
+        <div class="col col-3">{{ order['nums'] }}</div>
+
+        {% if order['price'] >0 %}
+        <div class="col col-4">{{ cal_total(order['price'], order['nums']) }}元</div>
+        {% else %}
+        <div class="col col-4">免费</div>
+        {% end %}
+    </div>
+</dd>
