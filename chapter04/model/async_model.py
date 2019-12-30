@@ -1,22 +1,24 @@
 from peewee import *
 from peewee import Model
-
+import peewee_async
 import datetime
 
-db = MySQLDatabase(
-    hosts='172.17.209.30',
+database = peewee_async.MySQLDatabase(
+    host='172.17.209.30',
     port=3306,
     user="sunmengzi",
     password="LASO_sunmengzi",
-    database="webserver"
+    database="webserver",
 )
+
+
 
 
 class BaseModel(Model):
     add_time = DateTimeField(default=datetime.datetime.now, verbose_name="添加时间")
 
     class Meta:
-        database = db
+        database = database
 
 
 class Supplier(BaseModel):
@@ -41,4 +43,8 @@ class Goods(BaseModel):
         table_name = "goods"
 
 
-db.create_tables([Goods, Supplier])
+# Goods.create_table(True)
+database.close()
+
+objects = peewee_async.Manager(database=database)
+database.set_allow_sync(False)
